@@ -45,7 +45,7 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
 
-            docker pull ${{ secrets.ECR_REPOSITORY }}:kamlesh
+            docker pull 147997149285.dkr.ecr.eu-north-1.amazonaws.com/dheeraj_new_web:kamlesh
 
             docker stop mycont || true
 
@@ -54,4 +54,4 @@ jobs:
             docker run -d \
               --name mycont \
               -p 8080:80 \
-              ${{ secrets.ECR_REPOSITORY }}:kamlesh
+              147997149285.dkr.ecr.eu-north-1.amazonaws.com/dheeraj_new_web:kamlesh
