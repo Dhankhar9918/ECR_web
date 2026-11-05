@@ -29,11 +29,11 @@ jobs:
       # Build and tag the image for ECR
       - name: Build Docker Image
         run: |
-          docker build -t ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY }}:v1 .
+          docker build -t ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY }}:v2 .
 
       - name: Push Docker Image to Amazon ECR
         run: |
-          docker push ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY }}:v1
+          docker push ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY }}:v2
           
       # Deploy to the EC2 container
       - name: Deploy to EC2
@@ -45,7 +45,7 @@ jobs:
           script: |
             aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin ${{ steps.login-ecr.outputs.registry }}
 
-            docker pull ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY }}:v1
+            docker pull ${{ secrets.ECR_REPOSITORY }}:v2
 
             docker stop mycont || true
 
@@ -54,4 +54,4 @@ jobs:
             docker run -d \
               --name mycont \
               -p 8080:80 \
-              ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY }}:v1
+              ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY }}:v2
